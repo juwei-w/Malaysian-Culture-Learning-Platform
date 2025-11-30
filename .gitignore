@@ -24,6 +24,7 @@ instance/
 # database.db is now tracked for deployment
 *.db
 !database.db
+!template.db
 *.sqlite
 *.sqlite3
 
