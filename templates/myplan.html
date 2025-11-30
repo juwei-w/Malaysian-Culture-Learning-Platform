@@ -1,0 +1,193 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Calendar
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3; width:250px" id="mySidebar">
+  <div class="sidebar">
+    <div class="w3-container w3-display-container">
+      <h4 class="w3-wide" style="color: rgba(157,157,157,255);"><b>CULTURE OF MALAYSIA</b></h4>
+    </div>
+    <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+      <div class="font">
+        <a href="{{ url_for('dashboard') }}" class="w3-bar-item w3-button">HOME</a>
+        <a href="{{ url_for('myplan') }}" class="w3-bar-item w3-button">CALENDAR</a>
+        <a href="{{ url_for('course') }}" class="w3-bar-item w3-button">COURSES</a>
+        <a href="{{ url_for('about') }}" class="w3-bar-item w3-button">ABOUT</a>
+
+        <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!---------- Top Nav ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top" style="z-index:2;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="topnav nav navbar-nav navbar-right">
+        <li>
+          <div class="dropdown">
+            <button class="dropbtn">My Cart <i class="fa fa-shopping-cart"></i></button>
+              <div class="dropdown-content">
+                <table id="cart">
+                  <tbody>
+                    {% for course in user_cart %}
+                      <tr>
+                        <td><a href="">{{course.course_name}}</a></td>
+                        <td><a href="">{{course.slot_day}}</a></td>
+                        <td><a href="">{{course.slot_time}}</a></td>
+                        <td><a href="">RM {{course.course_price}}</a></td>
+                        <td>
+                          <form method="POST" name="remove">
+                            <button class="btn btn-danger" name="remove" type="submit" value="{{course.course_name}}" 
+                            style="margin: 0 auto; display: block;">Remove</button>
+                          </form>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr style="border-top: 2px solid #3f3f3f;">
+                      <td></td>
+                      <td></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">Total:</p></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">RM {{ cart_total }}</p></td>
+                      <td colspan="">
+                        <form method="POST" name="checkout">
+                          <button class="btn btn-success" name="checkout" type="submit"
+                          style="margin: 0 5px; display: block;">Checkout</button>
+                        </form>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+          </div>
+        </li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+      
+      <!-- Search bar -->
+      <form action="/course" method="POST" autocomplete="on" class="navbar-form navbar-right">
+        {{ form.hidden_tag() }}
+        <input id="search" name="search" type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+        </table>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <div class="container-fluid">
+    <div class="row">
+      <head>
+        <h2 class="page-header">Calendar</h2>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}
+              <p style="color: red; text-align: left; font-weight: normal; margin-top: -18px; margin-left: 15px;">{{ msg }}<p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <script src="https://kit.fontawesome.com/16fda319fc.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js"></script>
+      </head>
+
+      <body>
+        <!--Add Start-->
+        <div class="container">
+          <form  method="POST">
+            <div class="mb-3">
+              <label for="title" class="form-label">Event title</label>
+              <input type="text" class="form-control" name="title" id="title" placeholder="Enter the event title">
+            </div>
+            <div class="mb-3">
+              <label for="start" class="form-label">Start date</label>
+              <input type="text" class="form-control" name="start" id="start" placeholder="Format is yyyy-mm-ddThh:mm Ignore Thh:mm if you need it for all day">
+            </div>
+            <div class="mb-3">
+              <label for="end" class="form-label">End date</label>
+              <input type="text" class="form-control" name="end" id="end" placeholder="leave empty for event to be all day">
+            </div>
+            <div class="mb-3">
+              <label for="url" class="form-label">Event url</label>
+              <input type="url" class="form-control" name="url" id="url" placeholder="Leave empty for no url to be there">
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+          </form>
+          <!--Add End-->
+          
+          <br>
+
+          <!--Calendar template with function-->
+          <div class="my-3">
+            <div id="calendar"></div>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              var calendarEl = document.getElementById('calendar');
+              var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialView: 'dayGridMonth',
+                events: [
+                  {% for event in events %}  
+                  {
+                    title: '{{event.title}}',
+                    start: '{{event.start}}',
+                    end: '{{event.end}}',
+                    url: '{{event.url}}',
+                  },
+                  {% endfor %}
+                  ],
+
+              eventClick: function (info) {
+                info.jsEvent.preventDefault(); // don't let the browser navigate
+          
+                if (info.event.url) {
+                  window.open(info.event.url);
+                }
+              }
+              });
+            calendar.render();
+            });
+          </script>
+        </div>
+      </body>
+    </div>
+  </div>
+  <!--calandar event add end-->
+</div>
+{% endblock %}

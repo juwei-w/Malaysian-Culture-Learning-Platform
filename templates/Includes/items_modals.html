@@ -1,0 +1,71 @@
+<style>
+  .modal-content {
+    background-color: #7B7777
+  }
+</style>
+
+<!-- More Info -->
+<div class="modal fade" id="Modal-MoreInfo-{{ course.course_id }}"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">
+          Course Info
+        </h5>
+        <button type="button" class="close"
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{course.course_info}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+                data-dismiss="modal">Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Confirm -->
+<div class="modal fade" id="Modal-PurchaseConfirm-{{ course.course_id }}"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">
+          {{course.course_name}}
+        </h5>
+        <button type="button" class="close"
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form method="POST">
+        {{ form.hidden_tag() }}
+        <h4 class="text-center">
+          Are you sure want to enroll this class "{{course.course_name}}" for RM{{course.course_price}}?
+        </h4>
+        <br>
+        <h6 class="text-center">
+          By clicking Purchase, you will purchase this item.
+        </h6>
+        <br>
+        <input id="register_course" name="register_course" type="hidden" value="{{course.course_name}}"> <!-- register course (put as checkout) data-toggle="modal" data-target="#Modal-PurchaseConfirm-{{ course.course_id }}" -->
+        {{ purchase_form.submit(class="btn btn-outline-success btn-block") }}
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+                data-dismiss="modal">Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

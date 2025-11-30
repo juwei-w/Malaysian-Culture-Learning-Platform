@@ -1,0 +1,468 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Course
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3; width:250px" id="mySidebar">
+  <div class="sidebar">
+    <div class="w3-container w3-display-container">
+      <h4 class="w3-wide" style="color: rgba(157,157,157,255);"><b>CULTURE OF MALAYSIA</b></h4>
+    </div>
+    <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+      <div class="font">
+        <a href="{{ url_for('dashboard') }}" class="w3-bar-item w3-button">HOME</a>
+        <a href="{{ url_for('myplan') }}" class="w3-bar-item w3-button">CALENDAR</a>
+        <a href="{{ url_for('course') }}" class="w3-bar-item w3-button">COURSES</a>
+        <a href="{{ url_for('about') }}" class="w3-bar-item w3-button">ABOUT</a>
+
+        <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!---------- Top Nav ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top" style="z-index:2;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="topnav nav navbar-nav navbar-right">
+        <li>
+          <div class="dropdown">
+            <button class="dropbtn">My Cart <i class="fa fa-shopping-cart"></i></button>
+              <div class="dropdown-content">
+                <table id="cart">
+                  <tbody>
+                    {% for course in user_cart %}
+                      <tr>
+                        <td><a href="">{{course.course_name}}</a></td>
+                        <td><a href="">{{course.slot_day}}</a></td>
+                        <td><a href="">{{course.slot_time}}</a></td>
+                        <td><a href="">RM {{course.course_price}}</a></td>
+                        <td>
+                          <form method="POST" name="remove">
+                            <button class="btn btn-danger" name="remove" type="submit" value="{{course.course_name}}" 
+                            style="margin: 0 auto; display: block;">Remove</button>
+                          </form>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr style="border-top: 2px solid #3f3f3f;">
+                      <td></td>
+                      <td></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">Total:</p></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">RM {{ cart_total }}</p></td>
+                      <td colspan="">
+                        <form method="POST" name="checkout">
+                          <button class="btn btn-success" name="checkout" type="submit"
+                          style="margin: 0 5px; display: block;">Checkout</button>
+                        </form>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+          </div>
+        </li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+      
+      <!-- Search bar -->
+      <form action="/course" method="POST" autocomplete="on" class="navbar-form navbar-right">
+        {{ form.hidden_tag() }}
+        <input id="search" name="search" type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+        </table>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+    <!---------- Course ---------->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h2 class="page-header">All Courses</h2>
+      <p>Check it out for our Malaysia's culture. </p>
+      
+      <!-- Select form to filter list -->
+      <form action="/course" method='POST'>
+        <label for="list">Filter By</label> 
+        <select id="list" name="list">
+          <option value="id" selected>Course ID</option>
+          <option value="price" {% if select == "price" %} selected {% endif %}>Course Price</option>
+          <option value="slot" {% if select == "slot" %} selected {% endif %}>Total Slot</option>
+        </select>
+        <button type="submit">Filter</button>
+      </form>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <p style="color: red; text-align: left; font-weight: normal; margin-bottom: -27px; margin-top: -3px;">{{ msg }}<p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+        
+      <br>
+
+      <table class="coursetable table table-hover table-dark">
+        <!-- Table Head (category) -->
+        <thead>
+          <tr>
+            <th scope="col-sm">ID</th>
+            <th scope="col-md">Course Name</th>
+            <th scope="col-sm">Price</th>
+            <th scope="col-sm">Total Order<br>/Total Slot</th>
+            <th scope="col-md">Trainer</th>
+            <th scope="col-sm">Day</th>
+            <th scope="col-sm">Time</th>
+            <th scope="col-sm">Action</th>
+          </tr>
+        </thead>
+        <!-- Table Row (course) -->
+        <tbody>
+          {% for course in courses %}
+          {% include 'includes/items_modals.html' %}
+            <tr>
+                <td scope="col-sm"> {{course.course_id}} </td>
+                <td scope="col-md"> {{course.course_name}} </td>
+                <td scope="col-sm"> RM {{course.course_price}} </td>
+                <td scope="col-sm"> {{course.course_order}}/{{course.course_slot}} </td>
+                <td scope="col-md"> {{course.course_trainer}} </td>
+                
+                <form action="/course" method="POST" name="add_cart" class="actionButton">
+                  <td style="color: black; text-align: left;">
+                    Day 1: {{course.course_slot_1_day}}
+                    <br><br>
+                    Day 2: {{course.course_slot_2_day}}
+                    <br><br>
+                    <select id="day" name="day">
+                      <option value="" selected>Select Day</option>
+                      <option value="{{course.course_slot_1_day}}" style="color: black;">{{course.course_slot_1_day}}</option>
+                      <option value="{{course.course_slot_2_day}}" style="color: black;">{{course.course_slot_2_day}}</option>
+                    </select>
+                  </td>
+                  <td style="color: black;">
+                    Time 1: {{course.course_slot_1_time}}
+                    <br><br>
+                    Time 2: {{course.course_slot_2_time}}
+                    <br><br>
+                    <select id="time" name="time">
+                      <option value="" selected>Select Time</option>
+                      <option value="{{course.course_slot_1_time}}" style="color: black;">{{course.course_slot_1_time}}</option>
+                      <option value="{{course.course_slot_2_time}}" style="color: black;">{{course.course_slot_2_time}}</option>
+                    </select>
+                  </td>
+                  <td>
+
+                  <input type="hidden" name="day">
+                  <input type="hidden" name="time">
+                  <button class="btn btn-outline btn-success" id="add_cart" name="add_cart" type="submit" value="{{course.course_name}}">Add To Cart</button>
+                </form>
+                  <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ course.course_id }}"
+                  style="width: 108px; display: block; margin-top: 5px;">More Info</button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h2 class="page-header">My Course</h2>
+      <div class="table-responsive">
+        <!-- {% if user_ordered != None %} -->
+          <table class="table table-striped" style="border: 2px solid black;">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for course in user_ordered %}
+                  <tr>
+                    <td>{{course.course_name}}</td>
+                    <td>{{course.slot_day}}</td>
+                    <td>{{course.slot_time}}</td>
+                    <td>
+                      <form method="POST" name="unregister">
+                        <button class="btn btn-danger" name="unregister" type="submit" value="{{course.course_name}}">Unregister</button>
+                      </form>
+                    </td>
+                  </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        <!-- {% else %} -->
+        <p style="background-color: aqua;">You have not register any course</p>
+        <p>Nothing to see here</p>
+      <!-- {% endif %} -->
+      <br>
+      <br>
+      <br>
+    
+     <!-- ======= Course Info Section ======= -->
+     <link rel="stylesheet" href="{{url_for('.static', filename='course.css')}}">
+     <section id="events" class="events">
+      <div class="container" data-aos="fade-up">
+
+
+        <div class="section-title">
+          <h2>Popular Courses</h2>
+        </div>
+
+        <div class="events-slider swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <div class="row event-item">
+                <div class="col-xs-2 col-sm-4 placeholder">
+                  <img src="../static/batik.jpg" width="800" height="1200" class="img-responsive">
+                </div>
+                <div class="col-lg-6 pt-3 pt-lg-0 content">
+                  <h3><b>Batik</b></h3>
+                  <div class="price">
+                    <p><span>RM400</span></p>
+                  </div>
+                  <p class="fst-italic">
+                    Batik is a technique of wax-resist dyeing applied to the whole cloth.This technique originated from the island of Java, Indonesia. Batik is made either by drawing dots and lines of the resist with a spouted tool called a canting, or by printing the resist with a copper stamp called a cap. The applied wax resists dyes and therefore allows the artisan to colour selectively by soaking the cloth in one colour, removing the wax with boiling water, and repeating if multiple colours are desired. 
+                  </p>
+                  <ul>
+                    <li><i class="bi bi-check-circled"></i> Batik is an ancient art form of Indonesia made with wax resistant dye on fabrics. Indonesian coastal batik (batik pesisir) made in the island of Java has a history of acculturation, a mixture of native and foreign cultures. It is a newer model compared to inland batik, and it uses more colors, though the patterns are a lot less intricate. This is because inland batik used to be made by select experts living in palace areas, while coastal batik can be made by anyone. </li>
+                    <li><i class="bi bi-check-circled"></i> Batik is very important to Indonesians and many people wear it to formal or casual events. Batik is commonly used by Indonesians in various rituals, ceremonies, traditions, celebrations, and even in daily uses. </li>
+                    <li><i class="bi bi-check-circled"></i> On October 2, 2009, UNESCO officially recognized the batik (written batik (batik tulis) and stamped batik (batik cap)) as a Masterpiece of Oral and Intangible Heritage of Humanity from Indonesia, and encouraged the Indonesian people and the Indonesian government to safeguard, transmit, promote, and develop the craftsmanship of batik. Since then, Indonesia celebrates "the National Batik Day" (Indonesian: Hari Batik Nasional) annually on October 2. Nowadays, Indonesians wear batik in honor of this ancient tradition. </li>
+                  </ul>
+                  <p>
+                    In the same year, UNESCO also recognized "Education and training in Indonesian Batik intangible cultural heritage for elementary, junior, senior, vocational school and polytechnic students, in collaboration with the Batik Museum in Pekalongan" as Masterpiece of Oral and Intangible Heritage of Humanity in Register of Good Safeguarding Practices List. 
+                  </p>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+            <br>
+            <br>
+            <br>
+            <div class="swiper-slide">
+              <div class="row event-item">
+                <div class="col-xs-2 col-sm-4 placeholder">
+                  <img src="../static/kuih.jpg" width="800" height="1200" class="img-responsive">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 content">
+                  <h3>Kuih</h3>
+                  <div class="price">
+                    <p><span>RM250</span></p>
+                  </div>
+                  <p class="fst-italic">
+                    Kuih (Indonesian: kue; derived from the Hokkien and Teochew kueh – 粿) are bite-sized snack or dessert foods commonly found in Southeast Asia and China. It is a fairly broad term which may include items that would be called cakes, cookies, dumplings, pudding, biscuits, or pastries in English and are usually made from rice or glutinous rice. In China, where the term originates from, kueh or koé (粿) in the Min Nan languages (known as "guo" in Mandarin) refers to snacks which are typically made from rice but can occasionally be made from other grains such as wheat. The term kuih is widely used in Malaysia, Brunei, and Singapore, kueh is used in Singapore and Indonesia, kue is used in Indonesia only, all three refer to sweet or savoury desserts.
+                  </p>
+                  <ul>
+                    <li><i class="bi bi-check-circled"></i> Though called by other names, one is likely to find various similar versions of kuih in neighbouring countries, such as Vietnam, Thailand, and Myanmar. For example, the colourful steamed kue lapis and the rich kuih bingka ubi are also available in Myanmar, Thailand, and Vietnam. In the Philippines, kuih are referred to in Tagalog as kakanin.</li>
+                  </ul>
+                  <p>
+                    Kuihs are not confined to a certain meal but can be eaten throughout the day. They are an integral part of Malaysian, Indonesian, Bruneian and Singaporean festivities such as Hari Raya and Chinese New Year. Many kuih are sweet, but some are savoury. In the northern states of Perlis, Kedah, Perak, and Kelantan, kuih (kuih-muih in Malay) are usually sweet. In the Southeast Peninsular states of Negeri Sembilan, Melaka and Selangor, savoury kuih can be found. Kuih are more often steamed than baked, and are thus very different in texture, flavour and appearance from Western cakes or puff pastries.
+                  </p>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+            <br>
+            <br>
+            <br>
+
+            <div class="swiper-slide">
+              <div class="row event-item">
+                <div class="col-xs-2 col-sm-4 placeholder">
+                  <img src="../static/wau bulan.jpg" width="800" height="1200" class="img-responsive">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 content">
+                  <h3>Wau Bulan</h3>
+                  <div class="price">
+                    <p><span>RM800</span></p>
+                  </div>
+                  <p class="fst-italic">
+                    Wau bulan (Jawi: واو بولن) is an intricately designed Malaysian moon-kite (normally with floral motifs) that is traditionally flown in the Malaysian state of Kelantan. It is one of Malaysia's national symbols, some others being the hibiscus. The reverse side of the fifty-cent coin of Malaysia (1989 series) features an intricately decorated wau bulan with a hummer on top. The logo of Malaysia Airlines (MAS) is based on the wau kucing (cat kite).
+                  </p>
+                  <ul>
+                    <li><i class="bi bi-check-circled"></i> There are many types of wau in Malaysia, each with its own specialty. Wau kucing (cat kite) and wau merak (peacock kite) are some of the variants.</li>
+                    <li><i class="bi bi-check-circled"></i> Wau bulan got its name from the crescent moon-like shape of its lower section (moon means "bulan" in Malaysian Malay). Given the right colour, wau bulan apparently resembles a rising crescent moon when flown. </li>
+                  </ul>
+                  <p>
+                    The size of wau bulan is bigger than any other Malaysian traditional kite. The typical size is 2.5 meters in width and 3.5 meters in length. This makes the decorations painted on the kite's body to be visible when it is flown high in the air. To make it more distinctive, wau bulan is normally decorated with large, strong-coloured patterns.
+                  </p>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Course Info Section -->
+    <br>
+    <br>
+    <br>
+
+    <!-- ======= Lecturer Section 1 ======= -->
+    <!-- <link rel="stylesheet" href="{{url_for('.static', filename='course.css')}}">
+    <section id="events" class="events">
+     <div class="container" data-aos="fade-up">
+    <section id="Lecturer" class="Lecturer">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Lecturer</h2>
+          <p>Our Proffesional Lecturer</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="member" data-aos="zoom-in" data-aos-delay="100">
+              <img src="../static/yexin.jpg" class="img-fluid" width="360" height="400"alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>LIM YE XIN</h4>
+                  <span>Lecturer of Batik</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="member" data-aos="zoom-in" data-aos-delay="200">
+              <img src="../static/zhengbin.jpg" class="img-fluid" width="360" height="400" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>TER ZHENG BIN</h4>
+                  <span>Lecturer of Kuih</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    
+    <!-- ======= Lecturer Section 2======= -->
+    <!-- <section id="Lecturer" class="Lecturer">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="member" data-aos="zoom-in" data-aos-delay="100">
+              <img src="../static/juwei.jpg" class="img-fluid" width="360" height="400"alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>WONG JU WEI </h4>
+                  <span>Lecturer of Wau Bulan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="member" data-aos="zoom-in" data-aos-delay="200">
+              <img src="../static/shinly.jpg" class="img-fluid" width="360" height="400" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Shinly Eu</h4>
+                  <span>Lecturer of Wau Bulan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section> -->
+
+    <!-- ======= Contact Section ======= -->
+    <!-- <section id="contact" class="contact">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Contact</h2>
+          <p>Contact Us</p>
+        </div>
+      </div>
+
+      <div data-aos="fade-up"></div>
+    </section>
+    <iframe style="border:0; width: 83%; height: 350px;" src=""></iframe> -->
+        
+  <!-- ======= contact us======= -->
+  <!-- <section id="contactus">
+    <div class="contactus-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="contactus-info">
+              <h3>Culture of Malaysia</h3>
+              <p>
+
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Contact Number :</h4>
+            <p>
+
+            </p>
+          </div>
+          <div class="col-lg-4 col-md-6 footer-links">
+            <h4>Contact Email :</h4>
+            <p>
+
+            </p>
+          </div> 
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ======= Footer ======= -->
+    <!-- <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="copyright">&copy; Copyright 
+            <strong><span>Culture Of Malaysia</span></strong>. 
+            <strong>All Rights Reserved</strong>
+          </div>
+        </div>
+      </div>
+    </footer> -->
+    
+  </div>
+</div>
+{% endblock %}
+

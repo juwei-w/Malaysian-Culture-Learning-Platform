@@ -1,0 +1,71 @@
+body {
+  padding-top: 50px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-image: url(flagss.jpg)
+}
+
+.navbar-brand {
+  color: "color: rgb(255, 223, 223);";
+  font-family: Verdana;
+  font-size: 20px;
+  text-shadow: 2px 1px red ;
+}
+
+.index-content {
+  color: aliceblue;
+  text-shadow: 3px 3px red;
+  font-family: "Brush Script MT", cursive;
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.index-subcontent{
+  font-family: Georgia, serif;
+  font-size: 25px;
+  text-shadow: 1px 2px red;
+}
+
+/* ---------- signup.html & login.html ---------- */
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  color: aliceblue;
+  text-shadow: 1px 1px red;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-family: Cursive;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

@@ -1,0 +1,226 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block content %}
+<head>
+  <script src="https://kit.fontawesome.com/50f7925ce4.js" crossorigin="anonymous"></script>
+</head>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
+  <div class="sidebar">
+    <div class="w3-container w3-display-container">
+      <h4 class="w3-wide" style="color: rgba(157,157,157,255);"><b>CULTURE OF MALAYSIA</b></h4>
+    </div>
+    <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+      <div class="font">
+        <a href="{{ url_for('dashboard') }}" class="w3-bar-item w3-button">HOME</a>
+        <a href="{{ url_for('myplan') }}" class="w3-bar-item w3-button">CALENDAR</a>
+        <a href="{{ url_for('course') }}" class="w3-bar-item w3-button">COURSES</a>
+        <a href="{{ url_for('about') }}" class="w3-bar-item w3-button">ABOUT</a>
+
+        <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!---------- Top Nav ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top" style="z-index:2;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="topnav nav navbar-nav navbar-right">
+        <li>
+          <div class="dropdown">
+            <button class="dropbtn">My Cart <i class="fa fa-shopping-cart"></i></button>
+              <div class="dropdown-content">
+                <table id="cart">
+                  <tbody>
+                    {% for course in user_cart %}
+                      <tr>
+                        <td><a href="">{{course.course_name}}</a></td>
+                        <td><a href="">{{course.slot_day}}</a></td>
+                        <td><a href="">{{course.slot_time}}</a></td>
+                        <td><a href="">RM {{course.course_price}}</a></td>
+                        <td>
+                          <form method="POST" name="remove">
+                            <button class="btn btn-danger" name="remove" type="submit" value="{{course.course_name}}" 
+                            style="margin: 0 auto; display: block;">Remove</button>
+                          </form>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr style="border-top: 2px solid #3f3f3f;">
+                      <td></td>
+                      <td></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">Total:</p></td>
+                      <td colspan=""><p style="color: black; padding: 0px 15px; padding-top: 11px;">RM {{ cart_total }}</p></td>
+                      <td colspan="">
+                        <form method="POST" name="checkout">
+                          <button class="btn btn-success" name="checkout" type="submit"
+                          style="margin: 0 5px; display: block;">Checkout</button>
+                        </form>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+          </div>
+        </li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+      
+      <!-- Search bar -->
+      <form action="/course" method="POST" autocomplete="on" class="navbar-form navbar-right">
+        {{ form.hidden_tag() }}
+        <input id="search" name="search" type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+        </table>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- Content -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <h3 class="page-header">Welcome, {{ name }}</h3>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for msg in messages %}
+        <p style="color: red; text-align: left; font-weight: normal; margin-left: 20px; margin-top: -20px;">{{ msg }}<p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="float-container">
+    <body>
+      <!-- Image header -->
+      <div class="w3-display-container w3-container">
+        <img src="../static/yummy.png" alt="intro" style="width:100%;">
+        <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
+          <h1 class="w3-jumbo w3-hide-small, w3-text-black">New arrivals</h1>
+          <h1 class="w3-hide-small, w3-text-black, w3-white">The Modern Traditions</h1>
+          <p><a href="{{ url_for('course') }}" class="w3-button w3-black w3-padding-large w3-large">EXPLORE NOW</a></p>
+        </div>
+      </div>
+      <div class="w3-container w3-text-grey" id="intro">
+        <p>4 items</p>
+      </div>
+
+      <!--PRODUCTS-->
+      <div class="w3-container">
+        <div class="quote" >
+          <div class="w3-panel w3-leftbar w3-white">
+            <p class="w3-xlarge w3-serif"><i>Make Authentic Traditional Handcrafts with Your Own Hands</i></p>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="page-header">Feedbacks</h2>
+
+      <table class="table table-hover table-dark">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Feedbacks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for feedback in feedbacks %}
+          <tr>
+            <td>{{feedback.user_name}} :</td>
+            <td>{{feedback.feedback}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <br>
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.feedback) }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+      </form>
+      <!-- <div class="w3-col l3 s6">
+        <div class="w3-container">
+          <div class="w3-display-container">
+            <img src="../static/kuih.webp" style="width:100%">
+            <span class="w3-tag w3-display-topleft">New</span>
+            <div class="w3-display-middle w3-display-hover">
+              <button class="w3-button w3-black">Add to cart now <i class="fa fa-shopping-cart"></i></button>
+            </div>
+          </div>
+          <p>KUIH MUIH<br><b>$19.99</b></p>
+        </div>
+      </div>
+
+      <div class="w3-col l3 s6">
+        <div class="w3-container">
+          <div class="w3-display-container">
+            <img src="../static/batiku.webp" style="width:100%">
+            <span class="w3-tag w3-display-topleft">New</span>
+            <div class="w3-display-middle w3-display-hover">
+              <button class="w3-button w3-black">Add to cart now <i class="fa fa-shopping-cart"></i></button>
+            </div>
+          </div>
+          <p>BATIK<br><b>$19.99</b></p>
+        </div>
+      </div>
+      
+      <div class="w3-col l3 s6">
+        <div class="w3-container">
+          <div class="w3-display-container">
+            <img src="../static/wauu.jpeg" style="width:100%">
+            <span class="w3-tag w3-display-topleft">New</span>
+            <div class="w3-display-middle w3-display-hover">
+              <button class="w3-button w3-black">Add to cart now <i class="fa fa-shopping-cart"></i></button>
+            </div>
+          </div>
+          <p>WAU BULAN<br><b>$19.99</b></p>
+        </div>
+      </div>
+
+      <div class="w3-col l3 s6">
+        <div class="w3-container">
+          <div class="w3-display-container">
+            <img src="../static/bamb.jpeg" style="width:100%">
+            <span class="w3-tag w3-display-topleft">New</span>
+            <div class="w3-display-middle w3-display-hover">
+              <button class="w3-button w3-black">Add to cart now <i class="fa fa-shopping-cart"></i></button>
+            </div>
+          </div>
+          <p>BAMBOO WEAVING<br><b>$19.99</b></p>
+        </div>
+      </div> -->
+    </body>
+  </div>
+</div>
+{% endblock %}

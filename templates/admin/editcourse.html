@@ -1,0 +1,131 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='admin.css')}}">
+
+{% endblock %}
+
+{% block content %}
+
+<!---------- Navbar ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#", style="color: rgb(255, 223, 223);">Culture of Malaysia</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li><a href="#">My Cart</a></li> -->
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+      
+      <!-- Search bar -->
+      <form name="search" method="POST" autocomplete="on" class="navbar-form navbar-right">
+        {{ form.hidden_tag() }}
+        <input id="search" name="search" type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+
+    </div>
+  </div>
+</nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="">Edit Course<span class="sr-only">(current)</span></a></li>
+          </ul>
+        </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h2 class="page-header">Courses</h2>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <p style="color: red; text-align: left; font-weight: normal; margin-top: -10px;">{{ msg }}<p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <!-- ---------- Display Course ---------- -->
+      <table class="table table-hover table-dark" style="border: 1px solid black;">
+        <!-- Table Head (category) -->
+        <thead>
+          <tr>
+            <th scope="col-sm">ID</th>
+            <th scope="col-md">Course Name</th>
+            <th scope="col-sm">Price</th>
+            <th scope="col-sm">Total Order<br>/Total Slot</th>
+            <th scope="col-md">Trainer</th>
+            <th scope="col-sm">Days</th>
+            <th scope="col-sm">Time</th>
+            <th scope="col-sm">Action</th>
+          </tr>
+        </thead>
+        <!-- Table Row (course) -->
+        <tbody>
+          {% for course in courses %}
+            <tr>
+              <td scope="col-sm"> {{course.course_id}} </td>
+              <td scope="col-md"> {{course.course_name}} </td>
+              <td scope="col-sm"> RM {{course.course_price}} </td>
+              <td scope="col-sm"> {{course.course_order}}/{{course.course_slot}} </td>
+              <td scope="col-md"> {{course.course_trainer}} </td>
+              <td scope="col-sm"> {{course.course_slot_1_day}} & {{course.course_slot_2_day}} </td>
+              <td scope="col-sm"> {{course.course_slot_1_time }} & {{course.course_slot_2_time }} </td>
+              <td> 
+                <!-- <div class="btn" style="background-color: greenyellow; ">
+                  <a href="{{ url_for('delete', course_id=course.course_id) }}">Update</a>
+                </div> -->
+                <div class="btn" style="background-color: red; ">
+                  <a href="{{ url_for('delete', course_id=course.course_id) }}">Delete</a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <!-- ---------- Create Course Form ---------- -->
+      <div class="container">
+        <form class="form-editcourse" method="POST" action="/admin/editcourse">
+          <h2 class="form-editcourse-heading">Create New Course</h2>
+          {{ form.hidden_tag() }}
+          {{ wtf.form_field(form.course_name) }}
+          {{ wtf.form_field(form.course_duration) }}
+          {{ wtf.form_field(form.course_price) }}
+          {{ wtf.form_field(form.course_slot) }}
+          {{ wtf.form_field(form.course_trainer) }}
+          {{ wtf.form_field(form.course_info) }}
+          {{ wtf.form_field(form.course_slot_1_day) }}
+          {{ wtf.form_field(form.course_slot_2_day) }}
+          {{ wtf.form_field(form.course_slot_1_time) }}
+          {{ wtf.form_field(form.course_slot_2_time) }}
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+        </form>
+      </div> <!-- /container -->
+    </div>
+
+  </div>
+</div>
+
+    
+{% endblock %}
+
+
+

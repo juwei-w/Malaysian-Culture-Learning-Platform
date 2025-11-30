@@ -1,0 +1,160 @@
+html, body {
+  height: 100%;
+  margin-top: 50px;
+}
+
+.page-header {
+  margin-top: 30px;
+  margin-left: 8px;
+  font-weight: bold;
+  font-size: 34px;
+  color: black;
+  text-shadow: 2px 1px rgb(200, 200, 200);
+  text-decoration-line: underline;
+}
+
+/*---------top nav----------*/
+/* Hide default border to remove 1px line */
+.navbar-fixed-top {
+  background-color: black;
+  border: 0;
+}
+
+/* My Cart & Logout */
+.topnav{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+/* My Cart drop button */
+.dropbtn {
+  background-color: transparent;
+  color: rgba(157,157,157,255);
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  min-width: 160px;
+  /* position: relative; */
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {color: white; background-color: transparent;}
+  
+.float-container {
+  text-align: right;
+  display: inline-block;
+}
+
+.nav{
+  display: flex;
+  flex: 1;
+}
+
+.headpic {
+  width: 102%;
+  font-size: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  text-align: center;
+  border: 4px solid;
+  border-radius: 20px;
+}
+
+.p{
+  transform: translateX(9%);
+  font-size: 25px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.image{
+  width: 600px;
+  height: 800px;
+  /* border: 4px solid black; */
+  border-radius: 15px;
+}
+
+.collapsible {
+  background-color:black;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 97%;
+  border-radius: 10px;
+  outline: none;
+  font-size: 20px;
+  text-align: center;
+  margin-left: 32px;
+  margin-bottom: 20px;
+}
+
+.active, .collapsible:hover {
+  background-color: whitesmoke;
+  color: black;
+}
+
+.content {
+  width: 97%;
+  margin-left: 32px;
+  margin-bottom: 20px;
+  padding: 18px;
+  display: none;
+  overflow: hidden;
+  background-color: whitesmoke;
+  text-align: center;
+}
+
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 18px;
+  color: black;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/*sidebar*/
+
+.sidebar{ 
+  background-color: black;
+  height: 100%;
+}
+
+.font{
+  font-size: 18px;
+  color: rgba(157,157,157,255);
+}
+
+.profile {
+  border-radius: 50%;
+}

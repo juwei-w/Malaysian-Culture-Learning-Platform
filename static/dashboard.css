@@ -1,0 +1,157 @@
+
+.sidebar {
+  background-color: black;
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
+  margin-top: 20px;
+}
+
+
+.font{
+  font-size: 18px;
+  color: rgba(157,157,157,255);
+}
+
+.quote {
+  float: left;
+}
+
+/*---------top nav----------*/
+/* Hide default border to remove 1px line */
+.navbar-fixed-top {
+  background-color: black;
+  border: 0;
+}
+
+/* My Cart & Logout */
+.topnav{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  color: white;
+}
+
+/* My Cart drop button */
+.dropbtn {
+  background-color: transparent;
+  color: rgba(157,157,157,255);
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+  border: 2px solid #3f3f3f;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  min-width: 160px;
+  /* position: relative; */
+  display: inline-block;
+  flex-flow: row wrap;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-content td{
+  background-color: white;
+
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {color: white; background-color: transparent;}
+
+/* ---------- Main content ---------- */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+
+.main .page-header {
+  margin-left: 15px;
+  font-weight: bold;
+  font-size: 34px;
+  color: black;
+  text-shadow: 2px 1px rgb(200, 200, 200);
+  text-decoration-line: underline;
+}
+
+
+/* Placeholder dashboard ideas */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+/* ---------- Course page ---------- */
+
+.table {
+  border: 2px solid rgb(58,62,74);
+}
+
+th{
+  background-color: #3f3f3f;
+  color: white;
+  text-align: left;
+  padding: 100px 0;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* .coursetable th{
+  text-align: center;
+} */
+
+/* .coursetable td{
+  text-align: center;
+} */
+
+
+/* make button inline */
+/* .action{
+  display: flex;
+} */
+
+.actionButton{
+  margin-top: 5px; 
+  display: block;
+}

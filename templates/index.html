@@ -1,0 +1,57 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Culture of Malaysia
+{% endblock %}
+
+{% block styles %}
+{{ super() }} <!-- superclass, inherit -->
+<link rel="stylesheet" href="{{url_for('.static', filename='base.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<!---------- Navbar ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- creating a button to toggle collapsed navbar (default = right side) -->
+      <!-- Aria attributes in general are used to make web applications accessible to people with disabilities. They are used primarily by screen readers to determine how to treat html elements. -->
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> 
+        <span class="sr-only">Toggle navigation</span>  <!-- screen readers only (helps blind people use a computer) -->
+        <span class="icon-bar"></span>                  <!-- (<span> = inline element <div> = block element) -->
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="", style="color: rgb(255, 223, 223);">Culture of Malaysia</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">                       <!-- for a full-height and lightweight navigation (including support for dropdowns) -->
+        <li><a href="{{ url_for('login') }}">Login</a></li>`
+        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        <p style="color: red; text-align: center; font-weight: bold;">{{ msg }}<p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <div class="index-content">
+    
+    <h1 style="font-size: 70px">Culture of Malaysia</h1>
+    <p class="index-subcontent">
+      <br><br>
+      Ideal place to pick up new Malaysia traditional skills
+      <br>
+      Hurry-Up Limited Offer! Get up to 50% off on your first purchase!</p>
+  </div>
+
+</div><!-- /.container -->
+
+{% endblock %}

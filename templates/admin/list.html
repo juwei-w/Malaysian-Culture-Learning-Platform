@@ -1,0 +1,127 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='admin.css')}}">
+
+{% endblock %}
+
+{% block content %}
+
+<!---------- Navbar ---------->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#", style="color: rgb(255, 223, 223);">Culture of Malaysia</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">My Cart</a></li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+      
+      <!-- Search bar -->
+      <form class="navbar-form navbar-right">
+        <input type="text" class="form-control" placeholder="Search...">
+      </form>
+    </div>
+  </div>
+</nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="{{ url_for('admindashboard') }}">Home</a></li>
+            <li><a href="{{ url_for('editcourse') }}">Edit Course</a></li>
+            <li><a href="">Class</a></li>
+            <li class="active"><a href="#">Filter List<span class="sr-only">(current)</span></a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="page-header">Courses</h2>
+          
+          <form action="/admin/list" method='POST'>
+            <label for="list">Filter By</label> 
+            <select id="list" name="list" >
+              
+              <option value="id" selected>Course ID</option>
+              <option value="duration" {% if select == "duration" %} selected {% endif %}>Course Duration</option>
+              <option value="price" {% if select == "price" %} selected {% endif %}>Course Price</option>
+              <option value="slot" {% if select == "slot" %} selected {% endif %}>Total Slot</option>
+              <option value="order" {% if select == "order" %} selected {% endif %}>Total Order</option>
+              <option value="date" {% if select == "date" %} selected {% endif %}>Date Created</option>
+            </select>
+            <button type="submit">Filter</button>
+          </form>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for msg in messages %}
+                <p style="color: red; text-align: left; font-weight: normal; margin-bottom: -27px; margin-top: -3px;">{{ msg }}<p>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+            
+          <br>
+
+          <table class="table table-hover table-dark">
+            <!-- Table Head (category) -->
+            <thead>
+              <tr>
+                <th scope="col-sm">ID</th>
+                <th scope="col-md">Course Name</th>
+                <th scope="col-sm">Course Duration (Month)</th>
+                <th scope="col-sm">Price</th>
+                <th scope="col-sm">Slot</th>
+                <th scope="col-md">Trainer</th>
+                <th scope="col-sm">Total Order</th>
+                <th scope="col-sm">Date Created</th>
+                <!-- <th scope="col-sm">Action</th> -->
+              </tr>
+            </thead>
+            <!-- Table Row (course) -->
+            <tbody>
+              {% for course in courses %}
+                <tr>
+                  <td scope="col-sm"> {{course.course_id}} </td>
+                  <td scope="col-md"> {{course.course_name}} </td>
+                  <td scope="col-sm"> {{course.course_duration}} </td>
+                  <td scope="col-sm"> {{course.course_price}} </td>
+                  <td scope="col-sm"> {{course.course_slot}} </td>
+                  <td scope="col-md"> {{course.course_trainer}} </td>
+                  <td scope="col-sm"> {{course.course_order}} </td>
+                  <td scope="col-sm"> {{course.course_date_created.strftime('%d-%m-%Y') }} </td>
+                  <td> 
+                    <!-- <div class="btn" style="background-color: greenyellow; ">
+                      <a href="{{ url_for('delete', course_id=course.course_id) }}">Update</a>
+                    </div> -->
+                    <!-- <div class="btn" style="background-color: red; ">
+                      <a href="{{ url_for('delete', course_id=course.course_id) }}">Delete</a>
+                    </div> -->
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    
+{% endblock %}
+
+
+
