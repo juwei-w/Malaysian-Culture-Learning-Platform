@@ -151,6 +151,25 @@ The application is deployed at: **https://malaysian-culture-learning-platform.on
 
 ---
 
+## 🔐 Demo Accounts
+
+These demo accounts are automatically created if they do not already exist (plaintext passwords for evaluation only):
+
+User Account:
+- Email: `testing@gmail.com`
+- Password: `testtest`
+
+Admin Account:
+- Email: `admin@admin.com`
+- Password: `admin123`
+
+Notes:
+- Do not reuse these credentials elsewhere.
+- Admin account allows course management actions; data may be modified by other testers.
+- For production, implement password hashing (e.g., Werkzeug `generate_password_hash`) and remove hardcoded demo passwords.
+
+---
+
 ## 🗂 Database Schema
 
 ### User
