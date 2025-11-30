@@ -12,11 +12,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from datetime import datetime
 import time
+import os
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Secretkey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+# Use absolute path for SQLite database - /tmp is writable on Render
+basedir = os.path.abspath(os.path.dirname(__file__))
+database_path = os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 Bootstrap(app)
 db = SQLAlchemy(app)
