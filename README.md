@@ -32,7 +32,6 @@ Malaysian-Culture-Learning-Platform/
 ├── requirements.txt                    # Python dependencies
 ├── Procfile                            # Deployment config for platforms like Render/Heroku
 ├── .gitignore                          # Git ignore patterns
-<<<<<<< HEAD
 ├── screenshots/                        # Optional README images (UI previews)
 │   ├── home.png
 │   ├── courses.png
@@ -40,8 +39,6 @@ Malaysian-Culture-Learning-Platform/
 │   ├── myplan.png
 │   ├── admin-dashboard.png
 │   └── edit-course.png
-=======
->>>>>>> b1f602113e82d553f50c9a2add682fc0f6ac798b
 ├── static/                             # Static assets (CSS, images)
 │   ├── about.css
 │   ├── admin.css
@@ -65,11 +62,7 @@ Malaysian-Culture-Learning-Platform/
 │   │   ├── admindashboard.html         # Admin overview
 │   │   ├── editcourse.html             # Create/edit courses
 │   │   └── list.html                   # Manage existing courses
-<<<<<<< HEAD
-│   └── Includes/                       # Note: capital 'I' (case-sensitive on Linux)
-=======
 │   └── Includes/
->>>>>>> b1f602113e82d553f50c9a2add682fc0f6ac798b
 │       └── items_modals.html           # Reusable course detail modals
 ├── building_user_login_system-master/  # Reference/tutorial materials
 ├── sqlite3.exe, sqldiff.exe, etc.      # SQLite utilities (Windows)
