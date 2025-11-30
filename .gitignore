@@ -21,10 +21,11 @@ instance/
 .flaskenv
 
 # Database
+# database.db is now tracked for deployment
 *.db
+!database.db
 *.sqlite
 *.sqlite3
-database.db
 
 # IDE
 .vscode/
