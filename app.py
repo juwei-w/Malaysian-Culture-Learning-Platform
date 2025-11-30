@@ -629,6 +629,10 @@ def logout():
 
 
 if __name__ == '__main__':
+    # Create all database tables if they don't exist
+    with app.app_context():
+        db.create_all()
+    
     app.run(debug=True)
     server = Server(app.wsgi_app)
     server.serve()
